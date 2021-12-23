@@ -207,12 +207,13 @@ const getUserList = async (req, res) => {
 //-----------------Fourth API UPDATE USER DETAILS
 const updateUserList = async (req, res) => {
     try {
+        let files = req.files;
         let userId = req.params.userId;
         let tokenId = req.userId
         if (!(validateBody.isValidObjectId(userId) && validateBody.isValidObjectId(tokenId))) {
             return res.status(400).send({ status: false, message: "userId or tokenId is not valid" });;
         }
-
+        
        
         const user = await userModel.findById(userId)
         if (!user) {
@@ -226,48 +227,71 @@ const updateUserList = async (req, res) => {
             return res.status(400).send({ status: false, message: "Please provide data to proceed your update request" });
         }
         const { fname, lname, email, profileImage, phone, password, address } = updateBody
-        if (!validateBody.isString(fname)) {
-            return res.status(400).send({ status: false, message: "If you are providing fname key you also have to provide its value" });
+        if (fname || lname || email || phone || password || address || profileImage) {
+            //validation for empty strings/values.
+            if (!validateBody.validString(fname)) {
+                return res.status(400).send({ status: false, message: "fname is missing ! Please provide the fname details to update." })
+            }
+            if (!validateBody.validString(lname)) {
+                return res.status(400).send({ status: false, message: "lname is missing ! Please provide the lname details to update." })
+            }
+            if (!validateBody.validString(email)) {
+                return res.status(400).send({ status: false, message: "email is missing ! Please provide the email details to update." })
+            }
+            if (!validateBody.validString(phone)) {
+                return res.status(400).send({ status: false, message: "phone number is missing ! Please provide the phone number to update." })
+            }
+            if (!validateBody.validString(password)) {
+                return res.status(400).send({ status: false, message: "password is missing ! Please provide the password to update." })
+            }
+            if (!validateBody.validString(profileImage)) {
+                return res.status(400).send({ status: false, message: "profileImage is missing ! Please provide the profileImage to update." })
+            }
         }
-        if (!validateBody.isString(lname)) {
-            return res.status(400).send({ status: false, message: "If you are providing lname key you also have to provide its value" });
-        }
-        if (!validateBody.isString(email)) {
-            return res.status(400).send({ status: false, message: "If you are providing email key you also have to provide its value" });
-        }
-        if (!validateBody.isString(profileImage)) {
-            return res.status(400).send({ status: false, message: "If you are providing profileImage key you also have to provide its value" });
-        }
-        if (!validateBody.isString(phone)) {
-            return res.status(400).send({ status: false, message: "If you are providing phone key you also have to provide its value" });
-        }
-        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(phone.trim())) {
-            return res.status(400).send({status: false,message: `Phone number should be a  valid indian number`}); 
-        }
-        if (!validateBody.isString(password)) {
-            return res.status(400).send({ status: false, message: "If you are providing password key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address)) {
-            return res.status(400).send({ status: false, message: "If you are providing address key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address.shipping.street)) {
-            return res.status(400).send({ status: false, message: "If you are providing address shipping street key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address.shipping.city)) {
-            return res.status(400).send({ status: false, message: "If you are providing address shipping city key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address.shipping.pincode)) {
-            return res.status(400).send({ status: false, message: "If you are providing address shipping pincode key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address.billing.street)) {
-            return res.status(400).send({ status: false, message: "If you are providing address billing street key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address.billing.city)) {
-            return res.status(400).send({ status: false, message: "If you are providing address billing city key you also have to provide its value" });
-        }
-        if (!validateBody.isString(address.billing.pincode)) {
-            return res.status(400).send({ status: false, message: "If you are providing address billing pincode key you also have to provide its value" });
-        }
+
+
+        // if (!validateBody.isString(fname)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing fname key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(lname)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing lname key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(email)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing email key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(profileImage)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing profileImage key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(phone)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing phone key you also have to provide its value" });
+        // }
+        // if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(phone.trim())) {
+        //     return res.status(400).send({status: false,message: `Phone number should be a  valid indian number`}); 
+        // }
+        // if (!validateBody.isString(password)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing password key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address.shipping.street)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address shipping street key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address.shipping.city)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address shipping city key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address.shipping.pincode)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address shipping pincode key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address.billing.street)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address billing street key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address.billing.city)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address billing city key you also have to provide its value" });
+        // }
+        // if (!validateBody.isString(address.billing.pincode)) {
+        //     return res.status(400).send({ status: false, message: "If you are providing address billing pincode key you also have to provide its value" });
+        // }
         const duplicateemail = await userModel.findOne({ email: email });
         if (duplicateemail) {
             return res.status(400).send({ status: false, message: "This user email is already exists with another user" });
@@ -276,8 +300,12 @@ const updateUserList = async (req, res) => {
         if (duplicatephone) {
             return res.status(400).send({ status: false, message: "This phone number already exists with another user" });
         }
+        // if (!files || (files && files.length === 0)) {
+        //     return res.status(400).send({ status: false, message: "Please provide profile Image or profile Image field" });
+        // }
+        const profilePic= await uploadFile(files[0])
         const hash = bcrypt.hashSync(password, saltRounds);
-        let data = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, profileImage: profileImage, phone: phone, password: password.hash, address: address }, { new: true });
+        let data = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, profileImage: profilePic, phone: phone, password: password.hash, address: address }, { new: true });
         if (data) {
             return res.status(200).send({ status: true, message: 'User profile updated', data: data });
         }
