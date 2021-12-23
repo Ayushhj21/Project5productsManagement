@@ -238,6 +238,9 @@ const updateUserList = async (req, res) => {
             if (!validateBody.validString(email)) {
                 return res.status(400).send({ status: false, message: "email is missing ! Please provide the email details to update." })
             }
+            // if (!validateBody.isValidEmail(email)) {
+            //     return res.status(400).send({ status: false, message: "Please provide a valid Email Id" });
+            // }
             if (!validateBody.validString(phone)) {
                 return res.status(400).send({ status: false, message: "phone number is missing ! Please provide the phone number to update." })
             }

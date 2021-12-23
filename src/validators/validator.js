@@ -28,6 +28,12 @@ const isValidSyntaxOfEmail = function (value) {
     }
     return true
 }
+const isValidEmail = function (value) {
+    if (!(validator.validate(value))) {
+        return false
+    }
+    return true
+}
 
 let alphabetTestOfString = function (value) {
     let regex = /^[A-Za-z ]+$/
@@ -51,5 +57,5 @@ module.exports = {
     isValidSyntaxOfEmail,
     isValidMobileNum,
     alphabetTestOfString,
-    isString,isValidObjectId,validString
+    isString,isValidObjectId,validString,isValidEmail
 }
