@@ -73,7 +73,6 @@ const userRegistration = async (req, res) => {
             return res.status(400).send({ status: false, message: "This email Id already exists with another user" });
         }
 
-    
         if (!validateBody.isValid(phone)) {
             return res.status(400).send({ status: false, message: "Please provide phone number or phone field" });
         }
@@ -160,7 +159,7 @@ const userLogin = async (req, res) => {
 
                 return res.status(200).send({
                     "status": true,
-                    Message: " user logged Succesfully",
+                    Message: " user loggedIn Succesfully",
                     data: {
                         userId: user._id,
                         token: generatedToken,
@@ -252,49 +251,6 @@ const updateUserList = async (req, res) => {
             }
         }
 
-
-        // if (!validateBody.isString(fname)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing fname key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(lname)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing lname key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(email)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing email key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(profileImage)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing profileImage key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(phone)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing phone key you also have to provide its value" });
-        // }
-        // if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(phone.trim())) {
-        //     return res.status(400).send({status: false,message: `Phone number should be a  valid indian number`}); 
-        // }
-        // if (!validateBody.isString(password)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing password key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address.shipping.street)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address shipping street key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address.shipping.city)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address shipping city key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address.shipping.pincode)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address shipping pincode key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address.billing.street)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address billing street key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address.billing.city)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address billing city key you also have to provide its value" });
-        // }
-        // if (!validateBody.isString(address.billing.pincode)) {
-        //     return res.status(400).send({ status: false, message: "If you are providing address billing pincode key you also have to provide its value" });
-        // }
         const duplicateemail = await userModel.findOne({ email: email });
         if (duplicateemail) {
             return res.status(400).send({ status: false, message: "This user email is already exists with another user" });
@@ -308,7 +264,7 @@ const updateUserList = async (req, res) => {
         // }
         const profilePic= await uploadFile(files[0])
         const hash = bcrypt.hashSync(password, saltRounds);
-        let data = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, profileImage: profilePic, phone: phone, password: password.hash, address: address }, { new: true });
+        let data = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, profileImage: profilePic, phone: phone, password: hash, address: address }, { new: true });
         if (data) {
             return res.status(200).send({ status: true, message: 'User profile updated', data: data });
         }

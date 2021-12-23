@@ -10,9 +10,9 @@ router.post('/user', userController.userRegistration)
 //-----------------SECOND API USER LOGIN
 router.post('/userlogin', userController.userLogin)
 //-----------------THIRD API GET USER DETAILS
-router.get('/user/:userId',myMiddleware.getUserDetails,userController.getUserList)
+router.get('/user/:userId/profile',myMiddleware.getUserDetails,userController.getUserList)
 //-----------------THIRD API UPDATE USER DETAILS
-router.put('/user/:userId',myMiddleware.getUserDetails,userController.updateUserList)
+router.put('/user/:userId/profile',myMiddleware.getUserDetails,userController.updateUserList)
 
 //-----------------FEATURE II - PRODUCT API
 //-----------------FIRST API CREATE PRODUCT
