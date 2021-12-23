@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController')
-//const productController = require('../controllers/productController')
-//const reviewController = require('../controllers/reviewController')
-//const awsController = require('../controllers/aws')
+
 const myMiddleware = require('../middlewares/authMiddleware')
 
 //-----------------FEATURE I - USER API
