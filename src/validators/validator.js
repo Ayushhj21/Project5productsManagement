@@ -49,6 +49,9 @@ const validString = function(value) {
     if (typeof value === 'string' && value.trim().length === 0) return false //it checks whether the string contain only space or not 
     return true;
 }
+const isValidSize = function(availableSizes) {
+    return ['S', 'XS', 'M','X','L','XXL','XL'].indexOf(availableSizes) !== -1
+}
 
 
 module.exports = {
@@ -57,5 +60,5 @@ module.exports = {
     isValidSyntaxOfEmail,
     isValidMobileNum,
     alphabetTestOfString,
-    isString,isValidObjectId,validString,isValidEmail
+    isString,isValidObjectId,validString,isValidEmail,isValidSize
 }

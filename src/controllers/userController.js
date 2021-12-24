@@ -44,9 +44,9 @@ const userRegistration = async (req, res) => {
     try {
         const myBody = req.body
         const { fname, lname, email, phone, password, address } = myBody;
-        let files=req.files
+        let files = req.files
 
-       
+
         if (!validateBody.isValidRequestBody(myBody)) {
             return res.status(400).send({ status: false, message: "Please provide data for successful registration" });
         }
@@ -77,7 +77,7 @@ const userRegistration = async (req, res) => {
             return res.status(400).send({ status: false, message: "Please provide phone number or phone field" });
         }
         if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(phone.trim())) {
-            return res.status(400).send({status: false,message: `Phone number should be a  valid indian number`}); 
+            return res.status(400).send({ status: false, message: `Phone number should be a  valid indian number` });
         }
         const duplicatePhone = await userModel.findOne({ phone })
         if (duplicatePhone) {
@@ -110,14 +110,14 @@ const userRegistration = async (req, res) => {
         if (!validateBody.isValid(address.billing.pincode)) {
             return res.status(400).send({ status: false, message: "Please provide address billing pincode or address billing pincode field" });
         }
-        if (!files|| (files && files.length === 0)){
+        if (!files || (files && files.length === 0)) {
             return res.status(400).send({ status: false, message: " Profile image or profile image key is missing" });
         }
-         
+
         //-----------SAVE USER PASSWORD WITH LOOK LIKE HASHED PASSWORD STORED IN THE DATABASE
-        const profilePic= await uploadFile(files[0])
+        const profilePic = await uploadFile(files[0])
         const hash = bcrypt.hashSync(password, saltRounds);
-        let userregister = { fname, lname, email, profileImage:profilePic, phone, password: hash, address }
+        let userregister = { fname, lname, email, profileImage: profilePic, phone, password: hash, address }
         const userData = await userModel.create(userregister);
         return res.status(201).send({ status: true, message: 'Success', data: userData });
     }
@@ -206,14 +206,13 @@ const getUserList = async (req, res) => {
 //-----------------Fourth API UPDATE USER DETAILS
 const updateUserList = async (req, res) => {
     try {
-        let files = req.files;
         let userId = req.params.userId;
         let tokenId = req.userId
         if (!(validateBody.isValidObjectId(userId) && validateBody.isValidObjectId(tokenId))) {
             return res.status(400).send({ status: false, message: "userId or tokenId is not valid" });;
         }
-        
-       
+
+
         const user = await userModel.findById(userId)
         if (!user) {
             return res.status(404).send({ status: false, message: "User does not exist with this userid" })
@@ -237,15 +236,14 @@ const updateUserList = async (req, res) => {
             if (!validateBody.validString(email)) {
                 return res.status(400).send({ status: false, message: "email is missing ! Please provide the email details to update." })
             }
-            // if (!validateBody.isValidEmail(email)) {
-            //     return res.status(400).send({ status: false, message: "Please provide a valid Email Id" });
-            // }
+            
             if (!validateBody.validString(phone)) {
                 return res.status(400).send({ status: false, message: "phone number is missing ! Please provide the phone number to update." })
             }
             if (!validateBody.validString(password)) {
                 return res.status(400).send({ status: false, message: "password is missing ! Please provide the password to update." })
             }
+            
             if (!validateBody.validString(profileImage)) {
                 return res.status(400).send({ status: false, message: "profileImage is missing ! Please provide the profileImage to update." })
             }
@@ -259,23 +257,24 @@ const updateUserList = async (req, res) => {
         if (duplicatephone) {
             return res.status(400).send({ status: false, message: "This phone number already exists with another user" });
         }
-        // if (!files || (files && files.length === 0)) {
-        //     return res.status(400).send({ status: false, message: "Please provide profile Image or profile Image field" });
-        // }
-        const profilePic= await uploadFile(files[0])
-        const hash = bcrypt.hashSync(password, saltRounds);
-        let data = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, profileImage: profilePic, phone: phone, password: hash, address: address }, { new: true });
-        if (data) {
-            return res.status(200).send({ status: true, message: 'User profile updated', data: data });
+        if (password) {
+            var encryptedPassword = await bcrypt.hash(password, saltRounds)
         }
-        else {
-            return res.status(404).send({ status: false, message: "This userId does not exist" });
+       
+        let files = req.files;
+        if ((files && files.length > 0)) {
+            const profileImage = await uploadFile(files[0])
+            let updateProfile = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, password: encryptedPassword, profileImage: profileImage, address: address, phone }, { new: true });
+            res.status(200).send({ status: true, message: "user profile updated successfully", data: updateProfile, });
+        } else {
+            let updateProfile = await userModel.findOneAndUpdate({ _id: userId }, { fname: fname, lname: lname, email: email, password: encryptedPassword, address: address, phone }, { new: true });
+            res.status(200).send({ status: true, message: "user profile updated successfull", data: updateProfile, });
         }
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err.message });
-    }
-};
+    };
+}
 
 module.exports = {
     userRegistration,
@@ -283,3 +282,9 @@ module.exports = {
     getUserList,
     updateUserList
 }
+
+
+
+
+
+
