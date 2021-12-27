@@ -18,9 +18,11 @@ router.put('/user/:userId/profile',myMiddleware.getUserDetails,userController.up
 //-----------------FEATURE II - PRODUCT API
 //-----------------FIRST API CREATE PRODUCT
 router.post('/products',productController.createProduct)
-
+router.get('/products',productController.getproduct)
+router.get('/products/:productId',productController.getProductsById)
 //-----------------FOURTH API UPDATE PRODUCT DETAIL
-router.put('products/:productId',productController.getProductsById)
+router.put('/products/:productId',productController.updateProduct)
+
 
 //-----------------FIFTH API DELETE PRODUCT FROM DB
 router.delete('/products/:productId',productController.deleteProduct)
