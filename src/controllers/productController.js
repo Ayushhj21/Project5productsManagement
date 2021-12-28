@@ -1,7 +1,7 @@
 const productModel = require('../models/productModel');
 const validateBody = require('../validators/validator');
 const aws = require("aws-sdk");
-const { update } = require('../models/productModel');
+
 
 
 
@@ -112,67 +112,7 @@ const createProduct = async (req, res) => {
 
 
 
-// const getproduct = async (req, res) => {
-//     try {
-//         let myQuery = req.query;
-//         if (!validateBody.isValidRequestBody(myQuery)) {
-//             return res.status(400).send({ status: false, message: "Please provide query for this request" });
-//         }
 
-//         const { size, name, price, priceSort } = myQuery
-//         let query = {}
-//         if (validateBody.isValid(size)) {
-//             query['availableSizes'] = size
-//         }
-//         if (price) {
-//             if (price.priceGreaterThan) {
-//                 if (typeof (price.priceGreaterThan) != number) {
-//                     return res.status(400).send({ status: false, message: "Please provide priceGreater than key" })
-//                 }
-//                 query['price'] = { $gt: price.priceGreaterThan }
-//             }
-//             if (price.priceLessThan) {
-//                 if (typeof price.priceLessThan !== 'number') {
-//                     return res.status(400).send({ status: false, message: "Please provide priceLess than key" })
-//                 }
-//                 query['price'] = { $lt: price.priceLessThan }
-
-//             }
-//             if (priceGreaterThan && priceLessThan) {
-//                 if (typeof price.priceGreaterThan !== 'number') {
-//                     return res.status(400).send({ status: false, message: "Please provide pricegreater than key" })
-//                 }
-//                 if (typeof price.priceLessThan !== 'number') {
-//                     return res.status(400).send({ status: false, message: "Please provide priceLess than key" })
-//                 }
-//                 query['price'] = { '$gt': price.priceGreaterThan, '$lt': price.priceLessThan }
-//             }
-//         }
-
-//         if (priceSort) {
-//             if (priceSort == -1 || priceSort == 1) {
-//                 query['priceSort'] = priceSort
-//             } else {
-//                 return res.status(400).send({ status: false, message: "Please provide valid value of priceSort" })
-//             }
-//         }
-
-//         if (validateBody.isValid(name)) {
-//             query['title'] = { $regex: name }
-//         }
-//         let productFound = await productModel.find(query)
-//         if (productFound.length == 0) {
-//             return res.status(404).send({ status: false, msg: "No products found" })
-//         }
-//         query['isDeleted'] = false;
-//         let products = await productModel.find(query).sort({ price: query.priceSort })
-//         return res.status(200).send({ status: true, message: "Success", data: products });
-//     }
-//     catch (err) {
-//         console.log(err)
-//         return res.status(500).send({ status: false, msg: err.message });
-//     }
-// }
 
 const getproduct = async (req, res) => {
     try {
@@ -195,6 +135,9 @@ const getproduct = async (req, res) => {
             if (priceLessThan) {
                 query['price'] = { $lt: priceLessThan }
             }
+            if(priceGreaterThan && priceLessThan){
+            query['price']={'$gt':priceGreaterThan, '$lt':priceLessThan}
+            }
             if (priceSort) {
                 if (priceSort == -1 || priceSort == 1) {
                     query['priceSort'] = priceSort
@@ -204,10 +147,11 @@ const getproduct = async (req, res) => {
             }
 
             let getAllProducts = await productModel.find(query).sort({ price: query.priceSort })
-            if (!(getAllProducts.length > 0)) {
+             const countproducts = getAllProducts.length
+            if (!(countproducts > 0)) {
                 return res.status(404).send({ status: false, msg: "No products found" })
             }
-            return res.status(200).send({ status: true, message: "Success", data: getAllProducts });
+            return res.status(200).send({ status: true, message: `${countproducts} Products Found`, data: getAllProducts });
         }
     } catch (err) {
         console.log(err)
