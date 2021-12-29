@@ -5,14 +5,12 @@ const jwt = require("jsonwebtoken")
 const getUserDetails = async function (req, res, next) {
   try {
     const token = req.header('Authorization') //setting token in the request header.
-    console.log("token", token)
     if (!token) {
       return res.status(403).send({ status: false, message: `Missing authentication token in request` })
     }
     tokenNew = token.split(' ')
     let requiredToken = tokenNew[1]
     const decoded = jwt.verify(requiredToken, 'developerprivatekey'); //decoding authentication token
-    console.log(decoded)
     if (!decoded) {
       return res.status(400).send({ status: false, message: "Invalid authentication token in request headers." })
     }

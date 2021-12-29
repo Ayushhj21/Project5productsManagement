@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController')
 const productController=require('../controllers/productController')
+const cartController=require('../controllers/cartController')
 
 const myMiddleware = require('../middlewares/authMiddleware')
 
@@ -26,6 +27,20 @@ router.put('/products/:productId',productController.updateProduct)
 
 //-----------------FIFTH API DELETE PRODUCT FROM DB
 router.delete('/products/:productId',productController.deleteProduct)
+
+
+router.post('/users/:userId',myMiddleware.getUserDetails,cartController.createCartProduct)
+
+//-----------------THIRD API GET CART DETAIL
+
+router.put('/users/:userId/cart',myMiddleware.getUserDetails,cartController.updateCart)
+router.get('/users/:userId/cart',myMiddleware.getUserDetails,cartController.getCartList)
+
+router.delete('/users/:userId/cart',myMiddleware.getUserDetails,cartController.deleteCart)
+
+
+
+
 
 
 
