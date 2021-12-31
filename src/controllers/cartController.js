@@ -39,7 +39,7 @@ const createCartProduct = async function (req, res) {
         // console.log("hii", items[0].quantity) //0th index se we are fetching quantity details
         // console.log("hii", items[0].productId) //0th index se we are fetching productId
         //cart not exists
-        if (!cartCheck) {
+        if (!cartCheck) { ///create cart
             const totalItems1 = items.length
             console.log(totalItems1, 'ashutosh')
 
@@ -208,7 +208,7 @@ const updateCart = async function (req, res) {
                     if (findCart.items[i].quantity > 0) {
                         console.log("Hi")
                         const response = await cartModel.findOneAndUpdate({ _id: cartId }, { items: findCart.items, totalPrice: updatedPrice }, { new: true })
-                        return res.status(201).send({ status: true, message: `One product removed from the cart successfully`, data: response })
+                        return res.status(201).send({ status: true, message: `One quantity  removed from the product cart successfully`, data: response })
                     }
                     else {
                         console.log("HOIIII")
