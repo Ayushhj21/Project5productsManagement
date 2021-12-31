@@ -52,6 +52,9 @@ const validString = function(value) {
 const isValidSize = function(availableSizes) {
     return ['S', 'XS', 'M','X','L','XXL','XL'].indexOf(availableSizes) !== -1
 }
+const isValidStatus = function(status) {
+    return ['pending', 'cancelled', 'completed'].indexOf(status) !== -1
+}
 
 
 module.exports = {
@@ -60,5 +63,5 @@ module.exports = {
     isValidSyntaxOfEmail,
     isValidMobileNum,
     alphabetTestOfString,
-    isString,isValidObjectId,validString,isValidEmail,isValidSize
+    isString,isValidObjectId,validString,isValidEmail,isValidSize,isValidStatus
 }
