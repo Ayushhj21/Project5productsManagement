@@ -30,8 +30,8 @@ let uploadFile = async (file) => {
             if (err) {
                 return reject({ "error": err });
             }
-            console.log(data)
-            console.log(`File uploaded successfully. ${data.Location}`);
+           // console.log(data)
+           // console.log(`File uploaded successfully. ${data.Location}`);
             return resolve(data.Location); //HERE 
         });
     });
@@ -61,13 +61,11 @@ const createProduct = async (req, res) => {
         if (!validateBody.alphabetTestOfString(description)) {
             return res.status(400).send({ status: false, message: "You can't use number in description" });
         }
-        if (!validateBody.isValid(price) || (price <= 0)) {//can add number validation //new thing added
+        if (!validateBody.isValid(price) || (price <= 0)) {
             return res.status(400).send({ status: false, message: "Please provide price or price field with a valid Indian price" });;
         }
-        // if(!(requestBody.price=="Number")){
-        //     return res.status(400).send({status:false,message:"The type of price should be Number only"})
-        // }
-        if (!validateBody.isValid(currencyId)) { //can add string validation
+        
+        if (!validateBody.isValid(currencyId)) { 
             return res.status(400).send({ status: false, message: "Please provide currencyId or currencyId field" });;
         }
         if (!(requestBody.currencyId == "INR")) {
@@ -90,14 +88,14 @@ const createProduct = async (req, res) => {
 
 
         if (availableSizes) {
-            let array = availableSizes.split(",").map(x => x.trim())
+            let array = availableSizes.split(",").map(x => x.trim()) //this will split the available sizes and give it an array
+            //console.log(array)
             for (let i = 0; i < array.length; i++) {
                 if (!(["S", "XS", "M", "X", "L", "XXL", "XL"].includes(array[i]))) {
                     return res.status(400).send({ status: false, msg: `Available sizes must be among ${["S", "XS", "M", "X", "L", "XXL", "XL"].join(',')}` })
                 }
             }
             if (Array.isArray(array)) {
-                console.log(Array.isArray(array))
                 productRegister['availableSizes'] = array
             }
         }
@@ -204,7 +202,7 @@ const updateProduct = async function (req, res) {
         }
 
         const product = await productModel.findOne({ _id: productId, isDeleted: false, })
-        console.log(product)
+        //console.log(product)
 
         if (!product) {
             res.status(404).send({ status: false, message: `product not found` })

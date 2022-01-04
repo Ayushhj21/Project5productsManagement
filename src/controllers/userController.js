@@ -153,7 +153,7 @@ const userLogin = async (req, res) => {
                 //-----------JWT GENERATE WITH EXPIRY TIME AND PRIVATE KEY
                 const generatedToken = jwt.sign({
                     userId: user._id,
-                    iat: Math.floor(Date.now() / 1000), //time at which the token was issued
+                    // iat: Math.floor(Date.now() / 1000), //time at which the token was issued
                     exp: Math.floor(Date.now() / 1000) + 60 * 180 ////setting token expiry time limit
                 }, 'developerprivatekey')
 

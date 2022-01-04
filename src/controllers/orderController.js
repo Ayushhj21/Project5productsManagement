@@ -71,7 +71,7 @@ const createOrder = async function (req, res) {
 
         }
         const order = await orderModel.create(orderDetails)
-        return res.status(201).send({ status: true, msg: "Successful created cart", data: order })
+        return res.status(201).send({ status: true, msg: "Successful created order", data: order })
     }
     catch (err) {
         console.log(err)
