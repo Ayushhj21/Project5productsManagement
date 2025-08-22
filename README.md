@@ -31,4 +31,51 @@
 
 ---
 
-## 📂 Project Structure  
+
+---
+
+## 🔑 Features & APIs  
+
+### 👤 User APIs  
+- **POST** `/register` → Create user (with encrypted password + S3 image upload)  
+- **POST** `/login` → Login & get JWT + userId  
+- **GET** `/user/:userId/profile` → Get profile (Auth required)  
+- **PUT** `/user/:userId/profile` → Update profile (Auth required)  
+
+### 📦 Product APIs  
+- **POST** `/products` → Create product (with S3 image upload)  
+- **GET** `/products` → Fetch products (filters: size, name, price range, sort)  
+- **GET** `/products/:productId` → Fetch product by ID  
+- **PUT** `/products/:productId` → Update product  
+- **DELETE** `/products/:productId` → Soft delete product  
+
+### 🛒 Cart APIs (Auth required)  
+- **POST** `/users/:userId/cart` → Add to cart / create cart  
+- **PUT** `/users/:userId/cart` → Update cart (remove/decrement product)  
+- **GET** `/users/:userId/cart` → Get user cart  
+- **DELETE** `/users/:userId/cart` → Clear cart  
+
+### 📑 Order APIs (Auth required)  
+- **POST** `/users/:userId/orders` → Create order from cart  
+- **PUT** `/users/:userId/orders` → Update order status  
+
+---
+
+## ✅ Testing Instructions  
+1. Clone repo & run `npm install`  
+2. Setup `.env` with MongoDB, AWS S3 credentials, JWT secret  
+3. Start server → `npm start`  
+4. Import Postman collection (**Project 5 Shopping Cart**) & test APIs  
+
+---
+
+## 📌 Response Structure  
+
+### ✅ Success  
+```yaml
+{
+  status: true,
+  message: "Success",
+  data: { }
+}
+
